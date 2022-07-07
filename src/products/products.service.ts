@@ -23,8 +23,9 @@ export class ProductsService {
     return this.repository.findOne({ where: { id } });
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return this.repository.update(id, updateProductDto);
+  async update(id: number, updateProductDto: UpdateProductDto) {
+    const result = await this.repository.update(id, updateProductDto);
+    return result.affected;
   }
 
   remove(id: number) {

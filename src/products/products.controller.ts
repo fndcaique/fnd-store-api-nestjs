@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   Patch,
   Post,
@@ -31,8 +32,17 @@ export class ProductsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateProductDto: UpdateProductDto) {
-    return this.productsService.update(id, updateProductDto);
+  async update(
+    @Param('id') id: number,
+    @Body() updateProductDto: UpdateProductDto,
+  ) {
+    const product = await this.productsService.findOne(id);
+    if (!product) {
+      throw new NotFoundException(`Not found a product with id ${id}`);
+    }
+    await this.productsService.update(id, updateProductDto);
+
+    return { ...product, ...updateProductDto };
   }
 
   @Delete(':id')
