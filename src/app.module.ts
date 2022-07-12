@@ -23,6 +23,7 @@ import { UsersModule } from './users/users.module';
       entities: [`${__dirname}/**/*.entity.{ts,js}`],
       synchronize: process.env.NODE_ENV === 'development',
       autoLoadEntities: true,
+      logging: 'all',
     }),
     ProductsModule,
     UsersModule,
@@ -32,7 +33,7 @@ import { UsersModule } from './users/users.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
 
 console.log({
   type: 'postgres',
