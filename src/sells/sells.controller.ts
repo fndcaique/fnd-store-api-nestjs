@@ -1,15 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { SellsService } from './sells.service';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CreateSellDto } from './dto/create-sell.dto';
 import { UpdateSellDto } from './dto/update-sell.dto';
+import { Sell } from './entities/sell.entity';
+import { SellsService } from './sells.service';
 
 @Controller('sells')
 export class SellsController {
-  constructor(private readonly sellsService: SellsService) {}
+  constructor(private readonly sellsService: SellsService) { }
 
   @Post()
   create(@Body() createSellDto: CreateSellDto) {
-    return this.sellsService.create(createSellDto);
+    const newSell = new Sell(createSellDto);
+    return this.sellsService.create(newSell);
   }
 
   @Get()

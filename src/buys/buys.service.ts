@@ -1,26 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { CreateBuyDto } from './dto/create-buy.dto';
-import { UpdateBuyDto } from './dto/update-buy.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { BaseRestService } from 'src/common/base-rest.service';
+import { Repository } from 'typeorm';
+import { Buy } from './entities/buy.entity';
 
 @Injectable()
-export class BuysService {
-  create(createBuyDto: CreateBuyDto) {
-    return 'This action adds a new buy';
+export class BuysService extends BaseRestService<Buy> {
+  constructor(
+    @InjectRepository(Buy) repository: Repository<Buy>
+  ) {
+    super(repository);
   }
 
-  findAll() {
-    return `This action returns all buys`;
+  findOne(id: number): Promise<Buy> {
+    throw new Error('Method not implemented.');
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} buy`;
-  }
-
-  update(id: number, updateBuyDto: UpdateBuyDto) {
-    return `This action updates a #${id} buy`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} buy`;
+  update(id: number, entityUpdated: Partial<Buy>): Promise<number> {
+    throw new Error('Method not implemented.');
   }
 }

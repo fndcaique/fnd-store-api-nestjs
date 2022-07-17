@@ -4,12 +4,19 @@ import {
   Entity,
   JoinTable,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 import { SellItem } from './sell-item.entity';
 
 @Entity()
 export class Sell implements Transaction {
+
+  constructor({ id, date, items }: Partial<Sell> = {}) {
+    this.id = id;
+    this.date = date || new Date();
+    this.items = items;
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 

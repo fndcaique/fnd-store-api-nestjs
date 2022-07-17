@@ -1,26 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSellDto } from './dto/create-sell.dto';
-import { UpdateSellDto } from './dto/update-sell.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { BaseRestService } from 'src/common/base-rest.service';
+import { DeepPartial, Repository } from 'typeorm';
+import { Sell } from './entities/sell.entity';
 
 @Injectable()
-export class SellsService {
-  create(createSellDto: CreateSellDto) {
-    return 'This action adds a new sell';
+export class SellsService extends BaseRestService<Sell> {
+  constructor(@InjectRepository(Sell) repository: Repository<Sell>) {
+    super(repository);
   }
 
-  findAll() {
-    return `This action returns all sells`;
+  findOne(id: number): Promise<Sell> {
+    return this.repository.findOne({ where: { id } });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} sell`;
-  }
-
-  update(id: number, updateSellDto: UpdateSellDto) {
-    return `This action updates a #${id} sell`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} sell`;
+  update(id: number, updateDto: DeepPartial<Sell>): Promise<number> {
+    throw new Error('Method not implemented.');
   }
 }

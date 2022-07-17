@@ -8,11 +8,19 @@ import {
   JoinTable,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 
 @Entity()
 export class Buy implements Transaction {
+
+  constructor({ id, date, user, items }: Partial<Buy> = {}) {
+    this.id = id;
+    this.date = date || new Date();
+    this.user = user;
+    this.items = items;
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -20,7 +28,7 @@ export class Buy implements Transaction {
   date: Date;
 
   @ManyToOne(() => User)
-  @JoinColumn({name: 'user_id'})
+  @JoinColumn({ name: 'user_id' })
   user: User;
 
   @OneToMany(() => BuyItem, (item) => item.buy)
