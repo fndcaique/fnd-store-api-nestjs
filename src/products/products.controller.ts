@@ -6,10 +6,11 @@ import {
   NotFoundException,
   Param,
   Patch,
-  Post,
+  Post
 } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { Product } from './entities/product.entity';
 import { ProductsService } from './products.service';
 
 @Controller('products')
@@ -18,7 +19,8 @@ export class ProductsController {
 
   @Post()
   create(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.create(createProductDto);
+    const newProduct = new Product(createProductDto);
+    return this.productsService.create(newProduct);
   }
 
   @Get()
@@ -34,7 +36,7 @@ export class ProductsController {
   @Patch(':id')
   async update(
     @Param('id') id: number,
-    @Body() updateProductDto: UpdateProductDto,
+    @Body() updateProductDto: UpdateProductDto
   ) {
     const product = await this.productsService.findOne(id);
     if (!product) {

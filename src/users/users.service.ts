@@ -1,20 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { BaseRestService } from 'src/common/base-rest.service';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
-export class UsersService {
-  constructor(@InjectRepository(User) private repository: Repository<User>) {}
-
-  create(createUserDto: CreateUserDto) {
-    return this.repository.save(createUserDto);
-  }
-
-  findAll() {
-    return this.repository.find();
+export class UsersService extends BaseRestService<User> {
+  constructor(@InjectRepository(User) repository: Repository<User>) {
+    super(repository);
   }
 
   findOne(id: number) {
@@ -24,9 +18,5 @@ export class UsersService {
   async update(id: number, updateUserDto: UpdateUserDto) {
     const result = await this.repository.update(id, updateUserDto);
     return result.affected;
-  }
-
-  remove(id: number) {
-    this.repository.delete(id);
   }
 }

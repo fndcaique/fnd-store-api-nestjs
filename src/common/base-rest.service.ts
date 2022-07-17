@@ -1,10 +1,10 @@
-import { DeepPartial, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 export abstract class BaseRestService<T> {
 
   constructor(protected repository: Repository<T>) { }
 
-  create(entity: DeepPartial<T>) {
+  create(entity: T) {
     return this.repository.save(entity);
   }
 

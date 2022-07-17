@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -18,7 +19,8 @@ export class UsersController {
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    const newUser = new User(createUserDto);
+    return this.usersService.create(newUser);
   }
 
   @Get()
@@ -37,7 +39,7 @@ export class UsersController {
     if (!user) {
       throw new NotFoundException(`Not found an user with id ${id}`);
     }
-    // await this.usersService.update(id, updateUserDto);
+    await this.usersService.update(id, updateUserDto);
     return { ...user, ...updateUserDto };
   }
 
