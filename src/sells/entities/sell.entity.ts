@@ -1,6 +1,5 @@
 import { Transaction } from 'src/interfaces/transaction.interface';
 import {
-  BaseEntity,
   Column,
   Entity,
   JoinTable,
@@ -10,7 +9,7 @@ import {
 import { SellItem } from './sell-item.entity';
 
 @Entity()
-export class Sell extends BaseEntity implements Transaction {
+export class Sell implements Transaction {
   @PrimaryGeneratedColumn()
   id: number;
 
