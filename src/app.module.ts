@@ -12,6 +12,7 @@ import { UsersModule } from './users/users.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -28,7 +29,7 @@ import { UsersModule } from './users/users.module';
     ProductsModule,
     UsersModule,
     BuysModule,
-    SellsModule,
+    SellsModule
   ],
   controllers: [AppController],
   providers: [AppService],

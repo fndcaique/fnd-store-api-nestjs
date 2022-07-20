@@ -38,3 +38,7 @@ yarn.lock
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# ENV Variables
+.env*
+!.env*example
