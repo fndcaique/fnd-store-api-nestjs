@@ -1,9 +1,15 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+interface ProductOptions {
+  id?: number;
+  name?: string;
+  quantity?: number;
+}
+
 @Entity()
 export class Product {
 
-  constructor({ id = 0, name = '', quantity = 0 } = {}) {
+  constructor({ id, name, quantity }: ProductOptions = {}) {
     this.id = id;
     this.name = name;
     this.quantity = quantity;
