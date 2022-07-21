@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BaseRestService } from 'src/common/base-rest.service';
 import { Repository } from 'typeorm';
+import { BaseRestService } from '../common/base-rest.service';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 
@@ -18,7 +18,6 @@ export class ProductsService extends BaseRestService<Product> {
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {
-    const result = await this.repository.update(id, updateProductDto);
-    return result.affected;
+    return (await this.repository.update(id, updateProductDto)).affected;
   }
 }
