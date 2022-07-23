@@ -1,4 +1,3 @@
-import { Transaction } from 'src/interfaces/transaction.interface';
 import {
   Column,
   Entity,
@@ -6,6 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn
 } from 'typeorm';
+import { Transaction } from '../../interfaces/transaction.interface';
 import { SellItem } from './sell-item.entity';
 
 @Entity()
