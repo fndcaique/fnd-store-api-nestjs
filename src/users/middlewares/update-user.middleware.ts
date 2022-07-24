@@ -10,6 +10,9 @@ export class UpdateUserMiddleware implements NestMiddleware {
     if (!username && !password) {
       throw new BadRequestException('For update an user is needed some user field');
     }
+    if (password && password.length < 6) {
+      throw new BadRequestException('The password must be longer than or equal to 6 characters');
+    }
     next();
   }
 }
