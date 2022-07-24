@@ -1,5 +1,4 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { Product } from '../products/entities/product.entity';
 
 export class Database {
   private static instance: Database = null;
@@ -14,7 +13,7 @@ export class Database {
       database: process.env.DB_DATABASE,
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
-      entities: [Product],
+      entities: [`${__dirname}/../**/*.entity.{ts,js}`],
       synchronize: process.env.NODE_ENV !== 'production',
       logging: 'all',
     };
