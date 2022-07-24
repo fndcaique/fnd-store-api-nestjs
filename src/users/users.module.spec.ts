@@ -1,34 +1,45 @@
 import { ConfigModule } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { Database } from '../database';
 import { resetDatabase } from '../test/helper/reset-database';
-import { User } from './entities/user.entity';
 import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
+import { UsersModule } from './users.module';
 
-describe('UsersController', () => {
+describe('UsersModule', () => {
   let controller: UsersController;
   let database: Database;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [UsersController],
-      imports: [ConfigModule.forRoot({ envFilePath: '.env.test' })],
-      providers: [UsersService, {
-        provide: getRepositoryToken(User),
-        useValue: (database = await Database.getInstance()).getRepository(User),
-      }],
+      imports: [
+        ConfigModule.forRoot({ envFilePath: '.env.test' }),
+        TypeOrmModule.forRoot({
+          type: 'postgres',
+          host: process.env.DB_HOST,
+          port: process.env.DB_PORT,
+          database: process.env.DB_DATABASE,
+          username: process.env.DB_USER,
+          password: process.env.DB_PASSWORD,
+          entities: [`${__dirname}/**/*.entity.{ts,js}`],
+          synchronize: process.env.NODE_ENV !== 'production',
+          autoLoadEntities: true,
+          logging: 'all',
+        }),
+        UsersModule
+      ],
     }).compile();
+    database = await Database.getInstance();
 
     controller = module.get<UsersController>(UsersController);
+
   });
 
   afterAll(async () => {
     await resetDatabase(database);
   })
 
-  it('should be defined', () => {
+  it('has a controlller defined', () => {
     expect(controller).toBeDefined();
   })
 
