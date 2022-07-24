@@ -1,6 +1,3 @@
-import { BuyItem } from 'src/buys/entities/buy-item.entity';
-import { Transaction } from 'src/interfaces/transaction.interface';
-import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   Entity,
@@ -10,6 +7,9 @@ import {
   OneToMany,
   PrimaryGeneratedColumn
 } from 'typeorm';
+import { BuyItem } from '../../buys/entities/buy-item.entity';
+import { Transaction } from '../../interfaces/transaction.interface';
+import { User } from '../../users/entities/user.entity';
 
 @Entity()
 export class Buy implements Transaction {

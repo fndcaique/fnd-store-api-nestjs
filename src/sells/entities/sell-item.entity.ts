@@ -1,12 +1,12 @@
-import { TransactionItem } from 'src/interfaces/transaction-item.interface';
-import { Product } from 'src/products/entities/product.entity';
 import {
   Column,
   Entity,
   JoinColumn,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from 'typeorm';
+import { TransactionItem } from '../../interfaces/transaction-item.interface';
+import { Product } from '../../products/entities/product.entity';
 import { Sell } from './sell.entity';
 
 @Entity()

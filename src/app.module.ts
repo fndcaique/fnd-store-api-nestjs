@@ -22,7 +22,7 @@ import { UsersModule } from './users/users.module';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       entities: [`${__dirname}/**/*.entity.{ts,js}`],
-      synchronize: process.env.NODE_ENV === 'development',
+      synchronize: process.env.NODE_ENV !== 'production',
       autoLoadEntities: true,
       logging: 'all',
     }),
