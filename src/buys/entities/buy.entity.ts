@@ -14,10 +14,11 @@ import { User } from '../../users/entities/user.entity';
 @Entity()
 export class Buy implements Transaction {
 
-  constructor({ id, date, user, items }: Partial<Buy> = {}) {
+  constructor({ id, date, user, client, items }: Partial<Buy> = {}) {
     this.id = id;
     this.date = date || new Date();
     this.user = user;
+    this.client = client;
     this.items = items;
   }
 
@@ -27,11 +28,19 @@ export class Buy implements Transaction {
   @Column()
   date: Date;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { nullable: false })
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @OneToMany(() => BuyItem, (item) => item.buy)
+  @ManyToOne(() => User, { nullable: false })
+  @JoinColumn({ name: 'client_id' })
+  client: User;
+
+  @OneToMany(
+    () => BuyItem,
+    (item) => item.buy,
+    { cascade: true, nullable: false }
+  )
   @JoinTable()
   items: BuyItem[];
 }

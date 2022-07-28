@@ -18,7 +18,10 @@ export class BuysController {
 
   @Post()
   create(@Body() createBuyDto: CreateBuyDto) {
+    // user exists?
+    // client exists?
     const newBuy = new Buy(createBuyDto);
+
     return this.buysService.create(newBuy);
   }
 
