@@ -6,19 +6,21 @@ import { BuyItem } from '../buys/entities/buy-item.entity';
 import { Buy } from '../buys/entities/buy.entity';
 import { Database } from '../database';
 import { Product } from '../products/entities/product.entity';
+import { ProductsController } from '../products/products.controller';
 import { User } from '../users/entities/user.entity';
+import { UsersController } from '../users/users.controller';
 import { resetDatabase } from './helper/reset-database';
 
 describe('AppController (e2e)', () => {
+  let moduleFixture: TestingModule = null;
   let app: INestApplication;
   let appAPI: request.SuperTest<request.Test>;
   let database: Database;
   let user = new User({ username: 'User', password: 'asdf12' });
   let client = new User({ username: 'Client', password: 'asdf12' });
-  let products: Product[];
   let items: BuyItem[];
 
-  const createNProducts = async (numberOfProducts: number) => {
+  const createSomeItems = async (numberOfProducts: number) => {
     const nProducts = [];
     for (let item = 1; item <= numberOfProducts; item += 1) {
       nProducts.push(new Product({
@@ -27,15 +29,9 @@ describe('AppController (e2e)', () => {
       }));
     }
 
-    const createdProducts = await Promise.all(nProducts.map(async (product) => {
-      const response = await appAPI.post('/products').send(product);
-      expect(response.status).toBe(201);
-      const savedProduct: Product = response.body;
-      const { id, name, quantity } = savedProduct;
-      expect(id).toBeDefined();
-      expect(name).toBe(product.name);
-      expect(quantity).toBe(product.quantity);
-      return savedProduct;
+    const productsController = moduleFixture.get<ProductsController>(ProductsController);
+    const createdProducts = await Promise.all(nProducts.map((product) => {
+      return productsController.create(product);
     }))
 
     items = createdProducts.map((product) => {
@@ -46,16 +42,18 @@ describe('AppController (e2e)', () => {
         sellPrice: buyPrice * 2.1,
         product,
       });
-    }).filter((item) => item.quantity > 0)
+    }).filter((item) => item.quantity > 0);
+  }
 
-    return createdProducts;
+  const createAnUserAndAClient = async () => {
+    const usersController = moduleFixture.get<UsersController>(UsersController);
+    user = await usersController.create(user);
+    client = await usersController.create(client);
   }
 
 
   beforeAll(async () => {
-
-
-    const moduleFixture: TestingModule = await Test.createTestingModule({
+    moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
 
@@ -66,49 +64,14 @@ describe('AppController (e2e)', () => {
 
     database = await Database.getInstance();
     await resetDatabase(database);
+
+    await createAnUserAndAClient();
+    await createSomeItems(7);
   });
 
   afterAll(async () => {
+    await resetDatabase(database);
     await app.close();
-  })
-
-  it('/users (POST) - Create an User', async () => {
-    const response = await appAPI
-      .post('/users')
-      .send(user)
-
-    expect(response.status).toBe(201);
-    expect(typeof response.body).toBe('object');
-    const savedUser = response.body as User;
-
-    const { id, username, password } = savedUser;
-
-    expect(id).toBeDefined();
-    expect(username).toBe(user.username);
-    expect(password).toBe(user.password);
-    user = savedUser;
-  })
-
-  it('/users (POST) - Create a Client', async () => {
-    const response = await appAPI
-      .post('/users')
-      .send(client)
-
-    expect(response.status).toBe(201);
-    expect(typeof response.body).toBe('object');
-    const savedClient = response.body as User;
-
-    const { id, username, password } = savedClient;
-
-    expect(id).toBeDefined();
-    expect(username).toBe(client.username);
-    expect(password).toBe(client.password);
-    client = savedClient;
-  });
-
-  it('/products (POST)', async () => {
-    products = await createNProducts(5);
-    expect(products).toHaveLength(5);
   })
 
   it('should return an error when request to /buys (POST) send a buy without items', async () => {
