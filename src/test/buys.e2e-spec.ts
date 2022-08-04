@@ -11,7 +11,7 @@ import { User } from '../users/entities/user.entity';
 import { UsersController } from '../users/users.controller';
 import { resetDatabase } from './helper/reset-database';
 
-describe('AppController (e2e)', () => {
+describe('Buys Controller (e2e)', () => {
   let moduleFixture: TestingModule = null;
   let app: INestApplication;
   let appAPI: request.SuperTest<request.Test>;
@@ -121,6 +121,40 @@ describe('AppController (e2e)', () => {
       message: ['client must be a non-empty object'],
     });
   });
+
+  it('should return an error when request to /buys (POST) send a buy with a invalid user', async () => {
+    const user = new User({ id: 0, username: 'John Doe' });
+    const buy = new Buy({
+      client,
+      user,
+      items,
+    })
+
+    const response = await appAPI.post('/buys').send(buy)
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({
+      statusCode: 400,
+      error: 'Bad Request',
+      message: `The user with id ${user.id} doesn't exists`,
+    });
+  })
+
+  it('should return an error when request to /buys (POST) send a buy with a invalid costumer', async () => {
+    const client = new User({ id: 0, username: 'John Doe' });
+    const buy = new Buy({
+      client,
+      user,
+      items,
+    })
+
+    const response = await appAPI.post('/buys').send(buy)
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({
+      statusCode: 400,
+      error: 'Bad Request',
+      message: `The client with id ${client.id} doesn't exists`,
+    });
+  })
 
   it('should save a buy', async () => {
     const buy = new Buy({
