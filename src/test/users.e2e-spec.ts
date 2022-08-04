@@ -13,9 +13,6 @@ describe('AppController (e2e)', () => {
   let user = new User({ username: 'User', password: 'asdf12' });
   let client = new User({ username: 'Client', password: 'asdf12' });
 
-
-
-
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
