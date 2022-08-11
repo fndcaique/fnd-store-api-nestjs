@@ -1,3 +1,4 @@
+import { IsNotEmpty } from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 interface ProductOptions {
@@ -15,6 +16,7 @@ export class Product {
     this.quantity = quantity;
   }
 
+  @IsNotEmpty()
   @PrimaryGeneratedColumn()
   id: number;
 

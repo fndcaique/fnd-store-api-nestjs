@@ -15,11 +15,9 @@ export class Database {
       password: process.env.DB_PASSWORD,
       entities: [`${__dirname}/../**/*.entity.{ts,js}`],
       synchronize: process.env.NODE_ENV !== 'production',
-      logging: 'all',
+      // logging: 'all',
     };
     this.dataSource = new DataSource(dataSourceOptions);
-
-    console.log('Database config:', dataSourceOptions)
   }
 
   public static async getInstance() {
@@ -33,7 +31,7 @@ export class Database {
     return Database.instance;
   }
 
-  public getDataSource() {
+  public getDataSource(): DataSource {
     return this.dataSource;
   }
 
